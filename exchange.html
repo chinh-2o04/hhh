@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quy Đổi Xu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Quy Đổi Số Lượng Xu</h2>
+
+        <input type="number" id="xuInput" placeholder="Nhập số xu..." />
+
+        <button onclick="convertMoney(70)">70$</button>
+        <button onclick="convertMoney(55)">55$</button>
+        <button onclick="customConvert()">Tự nhập $</button>
+
+        <input type="number" id="customRate" placeholder="Nhập số tiền / 1000 xu" style="display: none;" />
+        <button id="customConvertBtn" style="display: none;" onclick="applyCustomRate()">Áp dụng</button>
+
+        <div class="result">
+            <strong>Tổng tiền:</strong> <span id="convertedMoney">0</span> VND
+        </div>
+
+        <button onclick="window.location.href='index.html'">Quay lại</button>
+    </div>
+    <script src="exchange.js"></script>
+</body>
+</html>

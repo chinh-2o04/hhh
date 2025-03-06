@@ -1,29 +1,25 @@
 function filterEmails() {
     const inputText = document.getElementById("emailInput").value.trim();
-    if (!inputText) {
-        alert("Vui lòng nhập danh sách email!");
-        return;
-    }
-
     const lines = inputText.split("\n");
     let emailArray = [];
-    let totalXu = 0;
 
     lines.forEach(line => {
-        let parts = line.trim().split(/\s+/);
+        const parts = line.trim().split(" ");
         if (parts.length >= 2) {
-            let email = parts[0];
-            let password = parts.slice(1).join(" ");
-            let xuMatch = password.match(/\b\d+-\d+\b/);
-            let xu = xuMatch ? parseFloat(xuMatch[0].replace("-", ".")) : 0;
-            totalXu += xu;
+            const email = parts[0];
+            const password = parts.slice(1).join(" ");
+            const xuMatch = email.match(/(\d+)-(\d+)/);
+
+            let xu = 0;
+            if (xuMatch) {
+                xu = parseInt(xuMatch[1]) || 0;
+            }
+
             emailArray.push({ email, password, xu });
         }
     });
 
     renderEmails(emailArray);
-    document.getElementById("totalXu").innerText = totalXu.toFixed(4);
-    document.getElementById("totalMoney").innerText = (totalXu * 55).toLocaleString();
 }
 
 function renderEmails(emailArray) {
@@ -32,7 +28,7 @@ function renderEmails(emailArray) {
     emailArray.forEach((item, index) => {
         const row = document.createElement("tr");
         row.innerHTML = `
-            <td><button class="copy-btn" onclick="copyEmail('${item.email}', '${item.password}')">📋</button></td>
+            <td><button class="copy-btn" onclick="copyEmail(${index}, '${item.email}', '${item.password}')">📋</button></td>
             <td>${index + 1}</td>
             <td>${item.email}</td>
             <td>${item.password}</td>
@@ -41,4 +37,27 @@ function renderEmails(emailArray) {
         `;
         emailTable.appendChild(row);
     });
+}
+
+function copyEmail(index, email, password) {
+    const textToCopy = `${email} ${password}`;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        showCopyNotification(index);
+    }).catch(err => {
+        alert("Lỗi sao chép, thử lại!");
+    });
+}
+
+function showCopyNotification(index) {
+    const notification = document.getElementById("copyNotification");
+    notification.innerText = `Đã sao chép mail ${index + 1}`;
+    notification.style.display = "block";
+
+    setTimeout(() => {
+        notification.style.display = "none";
+    }, 1500);
+}
+
+function openConvertPage() {
+    window.location.href = "convert.html";
 }
